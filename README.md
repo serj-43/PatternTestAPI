@@ -1,0 +1,1 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/6pl9c6fii6no8wa4?svg=true)](https://ci.appveyor.com/project/serj-43/patterntestapi)
