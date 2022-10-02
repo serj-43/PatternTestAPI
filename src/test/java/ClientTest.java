@@ -15,8 +15,8 @@ public class ClientTest {
 
     @BeforeAll
     public static void initOperations() {
-        person1 = ClientGenerator.Client.NewUser("en", "active");
-        person2 = ClientGenerator.Client.NewUser("en", "blocked");
+        person1 = ClientGenerator.regUser("en", "active");
+        person2 = ClientGenerator.regUser("en", "blocked");
         open("http://localhost:9999");
     }
 

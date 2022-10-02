@@ -40,6 +40,12 @@ public class ClientGenerator {
         }
     }
 
+    public static IBankClient regUser(String locale, String status) {
+        IBankClient user = Client.NewUser(locale, status);
+        createUser(user);
+        return user;
+    }
+
     public static String newPassword(String locale) {
         Faker faker = new Faker(new Locale(locale));
         String password = faker.internet().password();
