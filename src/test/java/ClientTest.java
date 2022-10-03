@@ -1,5 +1,5 @@
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.ClientGenerator;
 import utils.IBankClient;
@@ -11,20 +11,58 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class ClientTest {
 
-    public static IBankClient person1, person2;
-
-    @BeforeAll
-    public static void initOperations() {
-        person1 = ClientGenerator.regUser("en", "active");
-        person2 = ClientGenerator.regUser("en", "blocked");
+    @BeforeEach
+    void initOperations() {
         open("http://localhost:9999");
     }
 
     @Test
     void shouldHaveActiveUser() {
-        $("[data-test-id='login'] input").setValue(person1.getLogin());
-        $("[data-test-id='password'] input").setValue(person1.getPassword());
+        IBankClient person = ClientGenerator.regUser("en", "active");
+        $("[data-test-id='login'] input").setValue(person.getLogin());
+        $("[data-test-id='password'] input").setValue(person.getPassword());
         $("[data-test-id='action-login']").click();
         $("#root").shouldHave(exactText("Личный кабинет"));
+    }
+
+    @Test
+    void shouldValidateLogin() {
+        IBankClient person = ClientGenerator.regUser("en", "active");
+        $("[data-test-id='login'] input").setValue(ClientGenerator.newLogin("en"));
+        $("[data-test-id='password'] input").setValue(person.getPassword());
+        $("[data-test-id='action-login']").click();
+        $("[data-test-id='error-notification']").shouldHave(exactText("Ошибка Ошибка! Неверно указан логин" +
+                " или пароль"));
+    }
+
+    @Test
+    void shouldValidatePassword() {
+        IBankClient person = ClientGenerator.regUser("en", "active");
+        $("[data-test-id='login'] input").setValue(person.getLogin());
+        $("[data-test-id='password'] input").setValue(ClientGenerator.newPassword("en"));
+        $("[data-test-id='action-login']").click();
+        $("[data-test-id='error-notification']").shouldHave(exactText("Ошибка Ошибка! Неверно указан логин" +
+                " или пароль"));
+    }
+
+    @Test
+    void shouldNotHaveSuchUser() {
+        ClientGenerator.regUser("en", "active");
+        IBankClient person = ClientGenerator.Client.NewUser("en","active");
+        $("[data-test-id='login'] input").setValue(person.getLogin());
+        $("[data-test-id='password'] input").setValue(person.getPassword());
+        $("[data-test-id='action-login']").click();
+        $("[data-test-id='error-notification']").shouldHave(exactText("Ошибка Ошибка! Неверно указан логин" +
+                " или пароль"));
+    }
+
+    @Test
+    void shouldCheckBlockedUser() {
+        IBankClient person = ClientGenerator.regUser("en", "active");
+        ClientGenerator.changeUserStatus(person);
+        $("[data-test-id='login'] input").setValue(person.getLogin());
+        $("[data-test-id='password'] input").setValue(person.getPassword());
+        $("[data-test-id='action-login']").click();
+        $("[data-test-id='error-notification']").shouldHave(exactText("Ошибка Ошибка! Пользователь заблокирован"));
     }
 }

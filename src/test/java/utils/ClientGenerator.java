@@ -36,7 +36,7 @@ public class ClientGenerator {
     public static class Client {
         public static IBankClient NewUser(String locale, String status) {
             Faker faker = new Faker(new Locale(locale));
-            return new IBankClient(faker.name().username(), faker.internet().password(), status);
+            return new IBankClient(newLogin(locale), newPassword(locale), status);
         }
     }
 
@@ -46,22 +46,28 @@ public class ClientGenerator {
         return user;
     }
 
+    public static IBankClient changeUserStatus(IBankClient user) {
+        String status = user.getStatus();
+        switch (status) {
+            case "active":
+                user.setStatus("blocked");
+                break;
+            case "blocked":
+                user.setStatus("active");
+                break;
+        }
+        createUser(user);
+        return user;
+    }
+    public static String newLogin(String locale) {
+        Faker faker = new Faker(new Locale(locale));
+        String password = faker.name().username();
+        return password;
+    }
     public static String newPassword(String locale) {
         Faker faker = new Faker(new Locale(locale));
         String password = faker.internet().password();
         return password;
-    }
-
-    public static String changeStatus(String status) {
-        switch (status) {
-            case "active":
-                status = "blocked";
-                break;
-            case "blocked":
-                status = "active";
-                break;
-        }
-        return status;
     }
 
 }
