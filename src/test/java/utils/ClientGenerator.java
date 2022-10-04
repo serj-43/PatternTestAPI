@@ -41,7 +41,7 @@ public class ClientGenerator {
     }
 
     public static IBankClient regUser(String locale, String status) {
-        IBankClient user = Client.NewUser(locale, status);
+        IBankClient user = Client.newUser(locale, status);
         createUser(user);
         return user;
     }
