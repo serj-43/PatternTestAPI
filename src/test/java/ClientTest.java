@@ -48,7 +48,7 @@ public class ClientTest {
     @Test
     void shouldNotHaveSuchUser() {
         ClientGenerator.regUser("en", "active");
-        IBankClient person = ClientGenerator.Client.NewUser("en","active");
+        IBankClient person = ClientGenerator.Client.newUser("en","active");
         $("[data-test-id='login'] input").setValue(person.getLogin());
         $("[data-test-id='password'] input").setValue(person.getPassword());
         $("[data-test-id='action-login']").click();

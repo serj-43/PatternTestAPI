@@ -34,7 +34,7 @@ public class ClientGenerator {
 
     @UtilityClass
     public static class Client {
-        public static IBankClient NewUser(String locale, String status) {
+        public static IBankClient newUser(String locale, String status) {
             Faker faker = new Faker(new Locale(locale));
             return new IBankClient(newLogin(locale), newPassword(locale), status);
         }
